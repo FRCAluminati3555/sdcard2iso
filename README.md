@@ -1,2 +1,2 @@
 # sdcard2iso
-Creates an ISO image from an SD card
+sdcard2iso is a simple tool to create ISO images from an SD card.
