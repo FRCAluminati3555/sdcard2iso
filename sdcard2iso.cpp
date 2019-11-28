@@ -21,6 +21,7 @@
  */
 
 #define _CRT_SECURE_NO_WARNINGS
+#define BUFFER_SIZE					1048576
 
 #include <stdio.h>
 #include <string>
@@ -28,7 +29,12 @@
 int main(int argc, char** args)
 {
 	// Buffer for reading
-	char buffer[1];
+	char* buffer = new char[BUFFER_SIZE];
+	if (buffer == NULL)
+	{
+		printf("Error: Out of memory\n");
+		return -1;
+	}
 
 	// Check arguments
 	if (argc < 3)
@@ -49,7 +55,7 @@ int main(int argc, char** args)
 	}
 
 	// Open iso file
-	FILE* iso = fopen(args[2], "w");
+	FILE* iso = fopen(args[2], "wb");
 	if (iso == NULL)
 	{
 		printf("Error: Unable to access ISO file\n");
@@ -57,12 +63,15 @@ int main(int argc, char** args)
 	}
 
 	// Copy
-	while (fread(buffer, 1, 1, sdCard))
+	while (size_t bytesRead = fread(buffer, 1, BUFFER_SIZE, sdCard))
 	{
-		fwrite(buffer, 1, 1, iso);
+		fwrite(buffer, 1, bytesRead, iso);
 	}
 
 	// Close files
 	fclose(sdCard);
 	fclose(iso);
+
+	// Release buffer
+	delete[] buffer;
 }
