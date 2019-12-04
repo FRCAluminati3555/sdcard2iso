@@ -21,7 +21,7 @@
  */
 
 #define _CRT_SECURE_NO_WARNINGS
-#define BUFFER_SIZE					1048576
+#define BUFFER_SIZE					32768 // 32 KB
 
 #include <stdio.h>
 #include <string>
@@ -67,6 +67,13 @@ int main(int argc, char** args)
 	{
 		fwrite(buffer, 1, bytesRead, iso);
 	}
+
+	// Write one buffer of all zeros
+	for (int i = 0; i < BUFFER_SIZE; i++)
+	{
+		buffer[i] = 0;
+	}
+	fwrite(buffer, 1, BUFFER_SIZE, sdCard);
 
 	// Close files
 	fclose(sdCard);
